@@ -1,0 +1,45 @@
+.data{
+    background-color: rgb(255, 255, 255);
+}
+
+.data-changed-positive {
+    animation-name: example;
+    animation-duration: 0.5s;
+    border-radius: .25em;
+
+    @keyframes example {
+        0%   {background-color: rgb(255, 255, 255);}
+        
+        50%  {background-color:rgb(131, 252, 151); left:200px; top:200px;}
+       
+        100% {background-color: rgb(255, 255, 255);}
+      }
+}
+
+.data-changed-neutral {
+    animation-name: example;
+    animation-duration: 0.5s;
+    border-radius: .25em;
+
+    @keyframes example {
+        0%   {background-color: rgb(255, 255, 255);}
+        
+        50%  {background-color:rgb(250, 252, 131); left:200px; top:200px;}
+       
+        100% {background-color: rgb(255, 255, 255);}
+      }
+}
+
+.data-changed-negative {
+    animation-name: example;
+    animation-duration: 0.5s;
+    border-radius: .25em;
+
+    @keyframes example {
+        0%   {background-color: rgb(255, 255, 255);}
+        
+        50%  {background-color:rgb(255, 115, 115); left:200px; top:200px;}
+       
+        100% {background-color: rgb(255, 255, 255);}
+      }
+}
