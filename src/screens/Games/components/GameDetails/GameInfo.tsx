@@ -11,7 +11,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 const GameInfo = ({ game } : { game: GameDto }) => {
   const sets = useSelector(selectors.getAllGameSets);
-  useGetCompletedSetsByGameIdQuery(game ? game.id : skipToken);
+  useGetCompletedSetsByGameIdQuery(game ? game.id : skipToken, { refetchOnMountOrArgChange: true });
 
   const isHomeTeamWinner = (set: SetDto) => set.homeTeamScore > set.awayTeamScore;
 
@@ -23,9 +23,9 @@ const GameInfo = ({ game } : { game: GameDto }) => {
       return <Fragment key={set.id}>
         <Divider>{set.setIndex}. geim</Divider>
         <Row justify={'center'}>
-          <Col span={8} ><span className={`${data ? 'team-text': ''}`}>{game.homeTeam.name}</span></Col>
-          <Col span={8}><span >{set.homeTeamScore} : {set.awayTeamScore}</span></Col>
-          <Col ><span className={`${!data ? 'team-text': ''}`}>{game.awayTeam ? game.awayTeam.name : game.awayTeamName }</span></Col>
+          <Col span={8} ><span className={`${data ? 'text-bold': ''}`}>{game.homeTeam.name}</span></Col>
+          <Col span={8}><span className={'text-bold'} style={{ paddingLeft: '1em' }}>{set.homeTeamScore} : {set.awayTeamScore}</span></Col>
+          <Col ><span className={`${!data ? 'text-bold': ''} `}>{game.awayTeam ? game.awayTeam.name : game.awayTeamName }</span></Col>
         </Row>
       </Fragment>;
     });
@@ -34,14 +34,14 @@ const GameInfo = ({ game } : { game: GameDto }) => {
   return <><Descriptions title="Mängu info">
 
     <Descriptions.Item label="Koduvõistkond">{game.homeTeam.name}</Descriptions.Item>
-    <Descriptions.Item label="voorsilsats">{game.awayTeam ? game.awayTeam.name : game.awayTeamName}</Descriptions.Item>
+    <Descriptions.Item label="Külalisvõistkond">{game.awayTeam ? game.awayTeam.name : game.awayTeamName}</Descriptions.Item>
     <Descriptions.Item label="Toimumiskoht">{game.location}</Descriptions.Item>
     <Descriptions.Item label="Aeg">{getDateTime(game.scheduledTime)}</Descriptions.Item>
 
   </Descriptions>
-
-  {renderList()}
-
+  <div className='game-set-container'>
+    {renderList()}
+  </div>
   </>;
 
 };

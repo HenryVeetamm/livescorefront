@@ -51,3 +51,10 @@ export interface SearhcDto {
   page: string | null;
   pageSize: string |null
 }
+
+export interface Commentary {
+  method: number;
+  category: number;
+  categoryResult: number;
+  player: { firstName: any, lastName: any, shirtNumber: any }
+}

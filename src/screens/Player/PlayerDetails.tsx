@@ -115,7 +115,7 @@ const PlayerDetails = ({ player } : { player: PlayerDto }) => {
             <Divider>Vastuvõtt</Divider>
             <Row>
               <Col span={12}>Kõik vastuvõtud</Col>
-              <Col span={12}><Text strong>{data.blockPoints}</Text></Col>
+              <Col span={12}><Text strong>{data.totalReception}</Text></Col>
             </Row>
             <Row>
               <Col span={12}>Suurepärased vastuvõtud </Col>

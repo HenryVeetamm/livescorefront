@@ -7,6 +7,8 @@ const name = 'teamApi';
 
 export const tags = {
   TEAM: 'TEAM',
+  TEAMS: 'TEAMS',
+  MY_TEAM: 'MY_TEAM',
 };
 
 export const teamLogoUploadUrl = `${basePath}/team/:id/logo`;
@@ -22,7 +24,7 @@ export const teamApi = createApi({
         method: 'POST',
         body: values
       }),
-      invalidatesTags: [ tags.TEAM ],
+      invalidatesTags: [ tags.TEAM, tags.TEAMS, tags.MY_TEAM ],
       transformResponse: (response : any) => {
         return response;
       }
@@ -33,7 +35,7 @@ export const teamApi = createApi({
         method: 'PUT',
         body: values
       }),
-      invalidatesTags: [ tags.TEAM ],
+      invalidatesTags: [ tags.TEAM, tags.TEAMS ],
       transformResponse: (response : any) => {
         return response;
       }
@@ -66,6 +68,7 @@ export const teamApi = createApi({
         url: '/all',
         method: 'GET'
       }),
+      providesTags: [ tags.TEAMS ],
       transformResponse: (response : any) => {
 
         return response;
@@ -76,6 +79,7 @@ export const teamApi = createApi({
         url: '/userteamId',
         method: 'GET'
       }),
+      providesTags: [ tags.MY_TEAM ],
       transformResponse: (response : any) => {
         return response;
       }
@@ -99,5 +103,6 @@ export const {
   useGetTeamsQuery,
   useGetAllTeamsQuery,
   useGetUserTeamIdQuery,
+  useLazyGetUserTeamIdQuery,
   useGetTeamByIdQuery,
 } = teamApi;

@@ -2,7 +2,6 @@ import { Avatar, Button, Card, Col, Dropdown, MenuProps, Row, Space } from 'antd
 import { GameDto } from 'app/services/game/types';
 import { TeamDto } from 'app/services/team/types';
 import '../../styles.less';
-import { CarOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectors as gameSelectors } from 'app/services/game/slice';
 import { useGetCurrentSetQuery, useManageGameScoreMutation, } from 'app/services/game';
@@ -17,6 +16,7 @@ import StartNewSetButton from '../Actions/StartNewSetButton';
 import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 
 import { DownOutlined } from '@ant-design/icons';
+import { TeamsIcon } from 'icons';
 
 
 const Score = ({ game }: { game: GameDto }) => {
@@ -24,8 +24,7 @@ const Score = ({ game }: { game: GameDto }) => {
   const viewersCount = useSelector(gameSelectors.getViwersCount);
   const userTeamId = useSelector(sessionSelectors.getUserTeamId);
   const { isMedium } = useScreenBreakpoint();
-
-  useGetCurrentSetQuery(game.id);
+  useGetCurrentSetQuery(game.id, { refetchOnMountOrArgChange: true });
 
   const [ addScore ] = useManageGameScoreMutation();
 
@@ -54,13 +53,13 @@ const Score = ({ game }: { game: GameDto }) => {
 
 
   const getStartOrStopButton = () => {
-    if (game.gameStatus === GameStatus.NotStarted) return <StartGameButton gameId={game.id}/>;
-    if (game.gameStatus === GameStatus.Started) return <EndGameButton gameId={game.id}/>;
+    if (game.gameStatus === GameStatus.NotStarted) return <Can teamId={[ game.homeTeam.id ]}><StartGameButton gameId={game.id}/></Can>;
+    if (game.gameStatus === GameStatus.Started) return <Can teamId={[ game.homeTeam.id ]}><EndGameButton gameId={game.id}/></Can>;
     return <></>;
   };
 
   const getSetButton = () => {
-    if (game.gameStatus === GameStatus.Started) return <StartNewSetButton gameId={game.id}/>;
+    if (game.gameStatus === GameStatus.Started) return <Can teamId={[ game.homeTeam.id ]}><StartNewSetButton gameId={game.id}/></Can>;
     return <></>;
   };
 
@@ -69,21 +68,27 @@ const Score = ({ game }: { game: GameDto }) => {
     { label: getSetButton(), key: '2' },
     { label: renderAddPlayers(), key: '3' } ];
 
+  const getDropDown = () =>{
+    if (game.gameStatus !== GameStatus.Ended) {
+      <Dropdown menu={{ items }} trigger={[ 'click' ]}>
+        <Button icon={<DownOutlined />} type="primary">
+              Tegevused
+        </Button>
+      </Dropdown>;
+    }
+    return <></>;
+  };
+
   const renderExtra = () => {
     if (game.gameStatus === GameStatus.Ended) return <></>;
-    return <Can teamId={game.homeTeam.id}>
+    return <Can teamId={[ game.homeTeam.id, game.awayTeam ? game.awayTeam.id : '' ]}>
       {isMedium ? <Space wrap>
         {getStartOrStopButton()}
         {getSetButton()}
         {renderAddPlayers()}
       </Space>
-        : <>
-          <Dropdown menu={{ items }} trigger={[ 'click' ]}>
-            <Button icon={<DownOutlined />} type="primary">
-              Tegevused
-            </Button>
-          </Dropdown>
-        </>}
+        : getDropDown()
+      }
     </Can>;
   };
 
@@ -99,7 +104,7 @@ const Score = ({ game }: { game: GameDto }) => {
 
   return (
     <Card className={`game-info${game.isGameLive ? ' live' : ''}`}
-      title={`Vaatajaid: ${viewersCount ? viewersCount : '-'}`}
+      title={<span style={{ fontWeight: 'lighter', color: 'grey' }}>Vaatajaid: {viewersCount ? viewersCount : '-'}</span>}
       extra={renderExtra()}>
       <Row>
 
@@ -108,7 +113,7 @@ const Score = ({ game }: { game: GameDto }) => {
             <Avatar
               src={game.homeTeam.teamLogoUri}
               size={'large'}
-              icon={<CarOutlined/>}
+              icon={<TeamsIcon/>}
               style={{ marginRight: '10px' }}
             />
           </Row>
@@ -127,7 +132,7 @@ const Score = ({ game }: { game: GameDto }) => {
             <Avatar
               src={getTeamLogo(game.awayTeam)}
               size={'large'}
-              icon={<CarOutlined/>}
+              icon={<TeamsIcon/>}
               style={{ marginLeft: '10px' }}
             />
           </Row>
@@ -136,7 +141,7 @@ const Score = ({ game }: { game: GameDto }) => {
           </Row>
         </Col>
       </Row>
-      <Can teamId={game.homeTeam.id}
+      <Can teamId={[ game.homeTeam.id ]}
         gameStatus={game.gameStatus}
         requiredStatus={GameStatus.Started}
       >

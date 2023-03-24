@@ -15,14 +15,7 @@ export const teamSlice = createSlice({
       state.team = payload;
       if (state.team) state.team.lambiNumber = 1;
     },
-    incrementCount: (state) => {
-      if (state.team && state.team.lambiNumber) {
-        state.team.lambiNumber += 1;
-      }
-      else if (state.team) {
-        state.team.lambiNumber = 1;
-      }
-    }
+    clearTeam: (state) => state.team = undefined
   },
   extraReducers: (builder) => {
     builder.addMatcher(teamApi.endpoints.getMyTeam.matchFulfilled, (state, { payload }) => {

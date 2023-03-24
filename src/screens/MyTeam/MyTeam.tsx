@@ -1,14 +1,18 @@
-import { Card, Col, Descriptions, Row, Skeleton, Space, Image } from 'antd';
+import { Card, Col, Descriptions, Row, Skeleton, Space, Image, MenuProps, Button, Dropdown } from 'antd';
 import { useGetMyTeamQuery } from 'app/services/team';
 import TeamForm from './components/TeamForm';
 import PlayerTable from './components/PlayerTable';
 import PlayerForm from './components/PlayerForm';
 import UploadTeamLogo from './components/Actions/UploadTeamLogo';
 import { useNavigate } from 'react-router-dom';
+import AddGame from 'screens/Games/AddGame';
+import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
+import { DownOutlined } from '@ant-design/icons';
 
 const MyTeam = () => {
   const { data, isFetching } = useGetMyTeamQuery();
   const navigate = useNavigate();
+  const { isLarge } = useScreenBreakpoint();
 
   if (isFetching) return <Skeleton active />;
 
@@ -26,7 +30,8 @@ const MyTeam = () => {
         <Descriptions.Item>
           <Image
             width={200}
-            src={data.teamLogoUri ? data.teamLogoUri : 'https://joesch.moe/api/v1/random'}
+            src={data.teamLogoUri ? data.teamLogoUri : ''}
+            placeholder={'teslk'}
             preview={false}
           />
         </Descriptions.Item>
@@ -40,13 +45,26 @@ const MyTeam = () => {
     </Space>;
   };
 
+
   const renderExtra = () => {
-    return (
+    const items: MenuProps['items'] = [
+      { label: renderActions(), key: '1' },
+      { label: data && <UploadTeamLogo id={data.id}/>, key: '2' },
+      { label: data && <PlayerForm/>, key: '3' },
+      { label:<AddGame />, key: '4' } ];
+
+    return (isLarge ?
       <Space wrap>
         {renderActions()}
         {data && <UploadTeamLogo id={data.id}/>}
         {data && <PlayerForm/>}
-      </Space>
+        { <AddGame />}
+      </Space>:
+      <Dropdown menu={{ items }} trigger={[ 'click' ]}>
+        <Button icon={<DownOutlined />} type="primary">
+              Tegevused
+        </Button>
+      </Dropdown>
     );
   };
 

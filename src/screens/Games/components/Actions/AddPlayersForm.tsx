@@ -1,10 +1,11 @@
-import { Button, Col, Divider, Modal, Row, Skeleton, Switch } from 'antd';
+import { Button, Col, Divider, Modal, Row, Skeleton, Space, Switch } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useAddPlayerToGameMutation } from 'app/services/game';
 import { playerApi, tags, useGetForAddingToGameQuery } from 'app/services/player';
 import { useDispatch } from 'react-redux';
 import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
+import isEmpty from 'lodash/isEmpty';
 
 
 const AddPlayerForm = ({ gameId } : { gameId: string }) => {
@@ -38,11 +39,13 @@ const AddPlayerForm = ({ gameId } : { gameId: string }) => {
       footer={null}
     >
       <Divider/>
-      {data.map(data =>
-        <Row key={data.id}><Col span={19}>#{data.shirtNumber} {data.firstName} {data.lastName}</Col>
-          <Col><Switch defaultChecked={data.alreadyAdded} disabled={meta.isLoading} onChange={(checked) => onToggleChange(checked, data.id)}/></Col>
-        </Row>
-      )}
+      {!isEmpty(data) ? <Space direction='vertical' style={{ width: '100%' }}>{data.map(data =>
+        <>
+          <Row key={data.id}><Col span={19}>#{data.shirtNumber} {data.firstName} {data.lastName}</Col>
+            <Col><Switch defaultChecked={data.alreadyAdded} disabled={meta.isLoading} onChange={(checked) => onToggleChange(checked, data.id)}/></Col>
+          </Row>
+        </>
+      )}</Space>: 'Mängijaid ei leitud'}
 
     </Modal>
   </>;

@@ -4,12 +4,11 @@ import { TeamDto } from 'app/services/team/types';
 import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 import { getDateTime } from 'utils/date';
 import '../styles.less';
-import {
-  CarOutlined
-} from '@ant-design/icons';
+
 import { useNavigate } from 'react-router-dom';
 import { Paths } from 'constants/paths';
 import { GameStatus } from 'constants/game';
+import { VolleyballIcon } from 'icons';
 
 const GameRow = ({ game }: { game: GameDto }) => {
   const { isMobile } = useScreenBreakpoint();
@@ -44,7 +43,7 @@ const GameRow = ({ game }: { game: GameDto }) => {
         <Col span={4}><div className='score-text-center'>OTSE</div></Col>
       );
     }
-    else return <Col span={4}><div className='text-center'>{getData()}</div></Col>;
+    else return <Col span={4}><div className='score-center text-bold'>VS</div></Col>;
   };
 
 
@@ -53,7 +52,7 @@ const GameRow = ({ game }: { game: GameDto }) => {
       className={`game-row${game.isGameLive ? ' live' : ''}`}
       onClick={() => navigate(Paths.GAME.replace(':id', game.id))}
     >
-      {game.gameStatus === GameStatus.Ended ? <div className='header-wrapper'>
+      {game.gameStatus !== GameStatus.Started ? <div className='header-wrapper'>
         <div className='header-info'>{getData()}</div>
       </div> : null}
       <Row>
@@ -63,7 +62,7 @@ const GameRow = ({ game }: { game: GameDto }) => {
             <Avatar
               src={game.homeTeam.teamLogoUri}
               size={'large'}
-              icon={<CarOutlined/>}
+              icon={<VolleyballIcon/>}
             />
           </Row>
           <Row justify={'center'} className={'text-center'}>
@@ -82,7 +81,7 @@ const GameRow = ({ game }: { game: GameDto }) => {
             <Avatar
               src={getTeamLogo(game.awayTeam)}
               size={'large'}
-              icon={<CarOutlined/>}/>
+              icon={<VolleyballIcon/>}/>
           </Row>
           <Row justify={'center'} className={'text-center'}>
             <div style={{ fontWeight:'bold' }}>{getAwayTeamName()}</div>

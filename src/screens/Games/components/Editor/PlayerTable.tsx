@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import PlayerViewMode from '../PlayerRows/PlayerViewMode';
 import { selectors as sessionSelectors } from 'app/services/session';
 import { GameStatus } from 'constants/game';
+import '../../styles.less';
 
 const PlayerTable = ({ gameId, teamId, gameStatus }: { gameId: string, teamId: string, gameStatus: number }) => {
 
@@ -17,7 +18,7 @@ const PlayerTable = ({ gameId, teamId, gameStatus }: { gameId: string, teamId: s
   if (!players && isLoading) return <Skeleton active/>;
   if ((!players || isEmpty(players)) && !isLoading) return <Card>Võistkond pole mängijaid märkinud</Card>;
 
-  return <Space direction="vertical" size='middle' style={{ display: 'flex' }}>
+  return <div className='stats-container'><Space direction="vertical" size='middle' style={{ display: 'flex' }}>
 
     {players.map((player : any) =>
     {return userTeamId !== teamId || gameStatus !== GameStatus.Started? <PlayerViewMode playerInGame={player} /> : <PlayerRow
@@ -29,7 +30,8 @@ const PlayerTable = ({ gameId, teamId, gameStatus }: { gameId: string, teamId: s
 
     }
 
-  </Space>;
+  </Space>
+  </div>;
 };
 
 export default PlayerTable;

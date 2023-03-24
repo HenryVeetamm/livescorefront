@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
 import { gameApi } from './api';
-import { GameDto, SetDto } from './types';
+import { Commentary, GameDto, SetDto } from './types';
 import isEmpty from 'lodash/isEmpty';
 
 type GameSliceType = {
@@ -10,7 +10,8 @@ type GameSliceType = {
   game?: GameDto,
   currentSet?: SetDto,
   viewersCount?: number,
-  totalSets?: SetDto[]
+  totalSets?: SetDto[],
+  commentary?: Commentary[];
 }
 
 export const gameSlice = createSlice({
@@ -39,6 +40,7 @@ export const gameSlice = createSlice({
       state.totalSets = undefined;
       state.viewersCount = undefined;
       state.gameId = undefined;
+      state.commentary = undefined;
     },
     setNewSet: (state, { payload }) => {
       if (state.totalSets && !isEmpty(state.totalSets) && state.currentSet) state.totalSets = [ ...state.totalSets, state.currentSet ];
@@ -49,6 +51,15 @@ export const gameSlice = createSlice({
       state.game = payload;
       if (state.totalSets && !isEmpty(state.totalSets) && state.currentSet) state.totalSets = [ ...state.totalSets, state.currentSet ];
       else if (state.currentSet) state.totalSets = [ state.currentSet ];
+    },
+    setPlayerDataChanged: (state, { payload }) => {
+      const { playerInGame, changedData } = payload;
+      const commentary : Commentary = { player: { firstName: playerInGame.player.firstName, lastName: playerInGame.player.lastName, shirtNumber: playerInGame.player.shirtNumber },
+        method: changedData.method,
+        category: changedData.category,
+        categoryResult: changedData.categoryResult };
+      if (!state.commentary) state.commentary = [ commentary ];
+      else state.commentary = [ commentary, ...state.commentary ];
     },
   },
   extraReducers: (builder) => {
@@ -65,14 +76,13 @@ export const gameSlice = createSlice({
       if (payload) state.currentSet = payload;
     });
     builder.addMatcher(gameApi.endpoints.getCompletedSetsByGameId.matchFulfilled, (state, { payload }) => {
-      console.log(payload, 'completedsets');
       state.totalSets = payload;
     });
-    // builder.addMatcher(gameApi.endpoints.startNewSet.matchFulfilled, (state, { payload }) => {
-    //   if (state.totalSets && !isEmpty(state.totalSets)) state.totalSets = [ ...state.totalSets, state.currentSet ];
-    //   else state.totalSets = [ state.currentSet ];
-    //   state.currentSet = payload;
-    // });
+    builder.addMatcher(gameApi.endpoints.startNewSet.matchFulfilled, (state, { payload }) => {
+      if (state.totalSets && !isEmpty(state.totalSets) && state.currentSet) state.totalSets = [ ...state.totalSets, state.currentSet ];
+      else if (state.currentSet) state.totalSets = [ state.currentSet ];
+      state.currentSet = payload;
+    });
     builder.addMatcher(gameApi.endpoints.endGame.matchFulfilled, (state, { payload }) => {
       state.game = payload;
       if (state.totalSets && state.currentSet) state.totalSets = [ ...state.totalSets, state.currentSet ];
@@ -88,7 +98,8 @@ export const selectors = {
   getGame: (state: RootState) => state.game.game,
   getCurrentSet: (state: RootState) => state.game.currentSet,
   getViwersCount: (state: RootState) => state.game.viewersCount,
-  getAllGameSets: (state: RootState) => state.game.totalSets
+  getAllGameSets: (state: RootState) => state.game.totalSets,
+  getCommentary: (state: RootState) => state.game.commentary
 };
 
 

@@ -63,6 +63,7 @@ export const playerApi = createApi({
         url: `/my-team/game/${values.gameId}`,
         method: 'GET',
       }),
+      providesTags: [ tags.MY_PLAYERS ],
       transformResponse: (response : any) => {
 
         return response;

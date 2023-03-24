@@ -6,7 +6,8 @@ import {
 import { Menu, MenuProps } from 'antd';
 import { selectors } from 'app/services/session/slice';
 import { Paths } from 'constants/paths';
-import { Teams, VolleyballIcon } from 'icons';
+import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
+import { TeamsIcon, VolleyballIcon } from 'icons';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -16,6 +17,8 @@ import './styles.less';
 
 const MenuNavigation = () => {
   const isAuthenticated = useSelector(selectors.isAuthenticated);
+  const { isLarge } = useScreenBreakpoint();
+
 
   //ANON/ALL
   //1.Kõik mängud: /games
@@ -46,7 +49,7 @@ const MenuNavigation = () => {
     {
       label: <NavLink to={Paths.TEAMS}>Võistkonnad</NavLink>,
       key: Paths.TEAMS,
-      icon: <Teams/>,
+      icon: <TeamsIcon/>,
     },
   ];
 
@@ -74,12 +77,11 @@ const MenuNavigation = () => {
     setOpenMenuItems(activeKeys);
   }, [ location ]);
 
-
   return <Menu
     selectedKeys={openMenuItems}
     mode="horizontal"
     items={menuItems}
-    className="centerStyle"
+    className={`${isLarge ? 'centerStyle' : '' } `}
   />;
 };
 

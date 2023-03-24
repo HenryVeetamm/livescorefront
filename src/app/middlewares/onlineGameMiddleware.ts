@@ -34,23 +34,23 @@ const disconnect = (connection: any) => {
 const subscribe = (store : any, connection: any) => {
   if (!connection) return;
   connection.on('personJoined', (data: any) => {
-    console.log(data, 'PERSONJONED');
     store.dispatch(gameActions.setViewersCounts(data));
   });
   connection.on('personLeft', (data: any) => {
-
     store.dispatch(gameActions.setViewersCounts(data));
   });
 
   connection.on('connected', (data: any) => {
-    console.log(data, 'CONNECTED');
     store.dispatch(gameActions.setViewersCounts(data));
   });
 
   connection.on('playerDataChanged', (teamId : any, gameId : any, dto : any, changedData: any) => {
+    console.log(dto, changedData, 'data, PLAYERDATACHANGED');
+    store.dispatch(gameActions.setPlayerDataChanged({ playerInGame : dto, changedData: changedData }));
     store.dispatch(playerActions.setPlayerData({ teamId, gameId, result: dto, changedData }));
   });
   connection.on('gameScoreChanged', (gameId : any, setDto : any) => {
+
     store.dispatch(gameActions.setGameCurrentSet(setDto));
   });
 
@@ -61,6 +61,7 @@ const subscribe = (store : any, connection: any) => {
   });
 
   connection.on('startNewSet', (gameId: any, setDto: any) => {
+    console.log(setDto, 'UUS SET ALGAB');
     store.dispatch(gameActions.setNewSet(setDto));
   });
 

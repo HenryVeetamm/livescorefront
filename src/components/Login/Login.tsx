@@ -1,15 +1,16 @@
 import { Modal, Form } from 'antd';
-import { actions, selectors, useLoginMutation } from 'app/services/session';
+import { actions as sessionActions, selectors, useLoginMutation } from 'app/services/session';
 import { removeSessionKey } from 'app/utils/session';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginForm from './components/LoginForm';
-import { LogoutOutlined, LoginOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from 'constants/paths';
 import './styles.less';
 import CustomButton from 'components/Button/CustomButton';
 import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
+import { LoginIcon, LogOutIcon } from 'icons';
+import { actions as teamActions } from 'app/services/team';
 
 const Login = () => {
   const isAuthenticated = useSelector(selectors.isAuthenticated);
@@ -22,7 +23,8 @@ const Login = () => {
 
   const logOut = () => {
     removeSessionKey();
-    dispatch(actions.logOut());
+    dispatch(sessionActions.logOut());
+    dispatch(teamActions.clearTeam());
     navigate(Paths.HOME);
   };
 
@@ -51,7 +53,8 @@ const Login = () => {
           breakPoint={!isMedium}
           buttonProps={
             {
-              icon:<LogoutOutlined/>,
+              type: 'link',
+              icon:<LogOutIcon/>,
               onClick: () => logOut()
             }}
         /> :
@@ -60,7 +63,8 @@ const Login = () => {
             title='Logi sisse'
             buttonProps={
               {
-                icon:<LoginOutlined/>,
+                type: 'link',
+                icon:<LoginIcon/>,
                 onClick: () => setIsOpen(true)
               }}
           />

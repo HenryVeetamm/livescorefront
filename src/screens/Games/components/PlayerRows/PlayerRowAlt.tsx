@@ -29,7 +29,6 @@ const PlayerRowAlt = ({ playerInGame, gameId, teamId } : { playerInGame : Player
 
     await addPoints(obs).unwrap();
   };
-  console.log(isMobile);
   if (isMobile) return <MobilePlayerRow playerInGame={playerInGame} />;
 
   return <>
@@ -42,7 +41,7 @@ const PlayerRowAlt = ({ playerInGame, gameId, teamId } : { playerInGame : Player
     </Row>
     <Row justify={'center'}>
       <Col span={4} className={'text-center'}>{playerInGame.player.firstName} {playerInGame.player.lastName}</Col>
-      <Can teamId={teamId}>
+      <Can teamId={[ teamId ]}>
         <Col span={5} className={'text-center'}>
           <ReceptionActions onClick={onClick}/>
         </Col>

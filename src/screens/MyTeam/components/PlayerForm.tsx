@@ -46,7 +46,7 @@ const PlayerForm = ({ button, initialValues } : PlayerFormProps) => {
       buttonProps={{
         icon: <UserAddOutlined />,
         onClick:() => setIsOpen(true),
-        type: 'primary'
+        type: 'link'
       }}
     />;
   };

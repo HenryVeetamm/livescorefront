@@ -71,6 +71,7 @@ export const gameApi = createApi({
         url: `/${gameId}/start-game`,
         method: 'POST',
       }),
+      invalidatesTags: [ tags.GAMES ],
       transformResponse: (response : any) => {
         return response;
       }

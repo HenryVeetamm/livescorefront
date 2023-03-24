@@ -1,6 +1,6 @@
 import Icon from '@ant-design/icons';
 
-const Teams = () => {
+const TeamsIcon = () => {
 
   const IconSvg = () => (
     <svg
@@ -16,4 +16,4 @@ const Teams = () => {
 
   return <Icon component={IconSvg}/>;
 };
-export default Teams;
+export default TeamsIcon;

@@ -13,8 +13,7 @@ export const playerSlice = createSlice({
   initialState: { } as PlayersState,
   reducers: {
     setPlayerData: (state, { payload }) => {
-      const { teamId, result, changedData } : any = payload;
-      console.log(changedData);
+      const { teamId, result } : any = payload;
       const newArray = map(state.players[teamId], (player: any) => player.id === result.id ? result: player);
       state.players[teamId] = newArray;
     },

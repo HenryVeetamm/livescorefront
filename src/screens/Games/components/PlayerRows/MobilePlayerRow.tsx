@@ -1,26 +1,57 @@
 import { Col, Divider, Row } from 'antd';
-
-import '../../styles.less';
 import { PlayerInGameDto } from 'app/services/player/types';
 import Tracker from 'components/Tracker/Tracker';
+import '../../styles.less';
+
 
 const MobilePlayerViewMode = ({ playerInGame } : { playerInGame : PlayerInGameDto }) => {
+  const totalCount = () => {
+    return playerInGame.perfectReception + playerInGame.goodReception + playerInGame.receptionFault +
+     playerInGame.attackToPoint + playerInGame.attackInGame + playerInGame.attackFault +
+     playerInGame.blockPoint + playerInGame.blockFault +
+     playerInGame.aces + playerInGame.serveFaults;
+  };
 
-  console.log('MOBILE');
   return <>
-    <Divider>Egonil on väga pikk nimi</Divider>
-    <Row justify={'center'}>
-      <Col span={4} className={'text-center'}>#{playerInGame.player.shirtNumber} {playerInGame.player.firstName} {playerInGame.player.lastName}</Col>
-      <Col span={5} className={'text-center'}>
-        <Tracker content={playerInGame.perfectReception} >
-        Vastuvõtt {playerInGame.perfectReception}/{playerInGame.goodReception}/{playerInGame.receptionFault}
-        </Tracker></Col>
-      <Col span={5} className={'text-center'}>Rünnak {playerInGame.attackToPoint}/{playerInGame.attackInGame}/{playerInGame.attackFault}</Col>
-      <Col span={5} className={'text-center'}>Blokk {playerInGame.blockPoint}/{playerInGame.blockFault}</Col>
-      <Col span={5} className={'text-center'}>Serv {playerInGame.aces}/{playerInGame.serveFaults}</Col>
+    <Divider plain>
+      <Tracker content={totalCount()}>
+        <span className='text-bold'>#{playerInGame.player.shirtNumber} {playerInGame.player.firstName} {playerInGame.player.lastName}</span>
+      </Tracker>
+    </Divider>
+    <Row>
+      <Col span={6} className={'text-center'}>
+
+        <Row justify={'start'} >
+          <span className='text-bold'>Vastuvõtt:</span>
+        </Row>
+        <Row justify={'start'}>
+          {playerInGame.perfectReception}/{playerInGame.goodReception}/{playerInGame.receptionFault}
+        </Row>
+      </Col>
+      <Col span={6} className={'text-center'}>
+
+        <Row justify={'center'}>
+          <span className='text-bold'>Rünnak:</span>
+        </Row>
+        <Row justify={'center'}>
+          {playerInGame.attackToPoint}/{playerInGame.attackInGame}/{playerInGame.attackFault}
+        </Row>
+      </Col>
+      <Col span={6} className={'text-center'}>
+
+        <Row justify={'center'}><span className='text-bold'>Blokk:</span></Row>
+        <Row justify={'center'}>{playerInGame.blockPoint}/{playerInGame.blockFault}</Row>
+      </Col>
+      <Col span={6} className={'text-center'}>
+        <Row justify={'center'}>
+          <span className='text-bold'>  Serv:</span>
+        </Row>
+        <Row justify={'center'}>
+          {playerInGame.aces}/{playerInGame.serveFaults}
+        </Row>
+      </Col>
     </Row>
   </>;
-
 };
 
 export default MobilePlayerViewMode;

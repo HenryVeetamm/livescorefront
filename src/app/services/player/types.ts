@@ -90,3 +90,10 @@ export interface PlayerStatistics {
   perfectReception: number;
   goodReception: number;
 }
+
+export interface PlayerCommentaryDto {
+  player: PlayerDto;
+  method: number;
+  categoryResult: number;
+  category: number;
+}

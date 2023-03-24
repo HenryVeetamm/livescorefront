@@ -1,9 +1,10 @@
 import GameRow from './components/GameRow';
-import { List, Skeleton } from 'antd';
+import { Card, Skeleton } from 'antd';
 import { useGetGamesQuery } from 'app/services/game';
+import isEmpty from 'lodash/isEmpty';
 
 const Games = () => {
-  const { data, isLoading } = useGetGamesQuery({ page: '1', pageSize: '1' });
+  const { data, isFetching } = useGetGamesQuery({ page: '1', pageSize: '1' }, { refetchOnMountOrArgChange: true });
   // const [ searchParams, setSearchParams ] = useSearchParams({});
   // const [ getGames, meta ] = useLazyGetGamesQuery();
   // const [ data , setData ] = useState<GameDto[] | undefined>();
@@ -31,8 +32,8 @@ const Games = () => {
   // }, []);
 
   // console.log(searchParams, 'väljas');
-  if (isLoading) return <Skeleton active/>;
-
+  if (isFetching) return <Skeleton active/>;
+  if (!data || isEmpty(data)) return <Card>Mänge ei leitud</Card>;
   // const onChange = async (value: any, value2: any) => {
   //   console.log(searchParams.get('page'), 'page');
   //   setSearchParams({ page: value, pageSize: value2 });
@@ -44,23 +45,8 @@ const Games = () => {
 
   return <>
     {/* <Pagination onChange={onChange} total={500} /> */}
-    <List
-      grid={{
-        gutter: 16,
-        xs: 1,
-        sm: 1,
-        md: 1,
-        lg: 1,
-        xl: 1,
-        xxl: 1,
-      }}
-      dataSource={data}
-      renderItem={(game) => (
-        <List.Item>
-          <GameRow game={game}/>
-        </List.Item>
-      )}
-    />
+    {data.map((game:any) => <GameRow key={game.id} game={game}/>)}
+
   </>;
 };
 

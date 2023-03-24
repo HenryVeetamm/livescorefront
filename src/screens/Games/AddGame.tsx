@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { gameType, gameTypeSelectList } from 'constants/gameTypes';
 import { useAddGameMutation } from 'app/services/game';
-import { useGetTeamsQuery } from 'app/services/team';
+import { useGetTeamsQuery, useGetUserTeamIdQuery } from 'app/services/team';
 import { formats } from 'utils/date';
+
 
 const AddGame = () => {
   const [ isOpen, setIsOpen ] = useState(false);
@@ -13,13 +14,18 @@ const AddGame = () => {
   const { data, isLoading } = useGetTeamsQuery();
   const [ addGame ] = useAddGameMutation();
   const [ form ] = Form.useForm();
+  const { data : teamId } = useGetUserTeamIdQuery();
+
+  if (!teamId) return null;
 
   const onSubmit = () => {
-    form.validateFields().then(async values => {
-      await addGame(values);
-      setIsOpen(false);
-      form.resetFields();
-    });
+
+    form.validateFields()
+      .then(async values => {
+        await addGame(values);
+        setIsOpen(false);
+        form.resetFields();
+      });
   };
 
   const handleTypeChange = (value : any) => {
@@ -41,7 +47,7 @@ const AddGame = () => {
       name="AwayTeamId"
       rules={[ { required: true, message: 'Väli on kohustuslik' } ]}
     >
-      <Select options={data} loading={isLoading}/>
+      <Select options={data} loading={isLoading} notFoundContent={'Võistkondi ei leitud'}/>
     </Form.Item>;
   };
 
@@ -72,8 +78,9 @@ const AddGame = () => {
           label="Mängu tüüp"
           name="gameType"
           rules={[ { required: true, message: 'Väli on kohustuslik' } ]}
+          initialValue={currentGameType}
         >
-          <Select options={gameTypeSelectList} defaultValue={currentGameType} onChange={handleTypeChange}/>
+          <Select options={gameTypeSelectList} onChange={handleTypeChange}/>
         </Form.Item>
 
         {getRequiredTeamField()}

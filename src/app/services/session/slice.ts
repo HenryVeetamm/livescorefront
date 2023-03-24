@@ -6,10 +6,10 @@ import { teamApi } from '../team';
 import { sessionApi } from './api';
 
 type SessionState = {
-  firstName: string | null ,
-  lastName: string | null ,
-  role: string | null ,
-  teamId: string | null ,
+  firstName?: string | null ,
+  lastName?: string | null ,
+  role?: string | null ,
+  teamId?: string | null ,
 }
 
 export const sessionSlice = createSlice({
@@ -19,9 +19,13 @@ export const sessionSlice = createSlice({
     state.firstName = payload.firstName;
     state.lastName = payload.lastName;
     state.role = payload.role;
-    state.teamId = payload.teamId;
   },
-  logOut: (state) => {state.firstName = null, state.lastName = null, state.role = null; state.teamId = null;}
+  logOut: (state) => {
+    console.log('logout');
+    state.firstName = undefined;
+    state.lastName = undefined;
+    state.role = undefined;
+    state.teamId = undefined;}
   },
   extraReducers: (builder) => {
     builder.addMatcher(sessionApi.endpoints.login.matchFulfilled, (state, { payload }) => {
@@ -29,9 +33,9 @@ export const sessionSlice = createSlice({
       state.firstName = decoded['given_name'];
       state.lastName = decoded['family_name'];
       state.role = decoded['role'];
-      state.teamId = decoded['team_id'];
     });
     builder.addMatcher(teamApi.endpoints.getUserTeamId.matchFulfilled, (state, { payload }) => {
+      console.log(payload, 'GETUSERTEAMID');
       state.teamId = payload;
     });
   } });
