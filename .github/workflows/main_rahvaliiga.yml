@@ -53,4 +53,4 @@ jobs:
           app-name: 'rahvaliiga'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2C45BD16D012489FBC41EA73C72562E5 }}
-          package: ./build/*
+          package: .
