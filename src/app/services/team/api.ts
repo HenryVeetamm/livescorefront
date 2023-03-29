@@ -24,7 +24,7 @@ export const teamApi = createApi({
         method: 'POST',
         body: values
       }),
-      invalidatesTags: [ tags.TEAM, tags.TEAMS, tags.MY_TEAM ],
+      invalidatesTags: [ tags.TEAM, tags.TEAMS ],
       transformResponse: (response : any) => {
         return response;
       }
@@ -45,7 +45,7 @@ export const teamApi = createApi({
         url: 'my-team',
         method: 'GET'
       }),
-      providesTags: [ tags.TEAM ],
+      providesTags: [ tags.MY_TEAM ],
       transformResponse: (response : any) => {
         return response;
       }

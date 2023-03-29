@@ -10,39 +10,42 @@ import './styles.less';
 import CustomButton from 'components/Button/CustomButton';
 import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 import { LoginIcon, LogOutIcon } from 'icons';
-import { actions as teamActions } from 'app/services/team';
+import { tags as teamTags, teamApi } from 'app/services/team';
+import { playerApi, tags } from 'app/services/player';
 
 const Login = () => {
-  const isAuthenticated = useSelector(selectors.isAuthenticated);
-  const { isMedium } = useScreenBreakpoint();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isMedium } = useScreenBreakpoint();
+  const isAuthenticated = useSelector(selectors.isAuthenticated);
   const [ isOpen, setIsOpen ] = useState(false);
   const [ login, meta ] = useLoginMutation();
   const [ form ] = Form.useForm();
-  const navigate = useNavigate();
+
 
   const logOut = () => {
+    dispatch(teamApi.util.invalidateTags([ teamTags.MY_TEAM ]));
+    dispatch(playerApi.util.invalidateTags([ tags.MY_PLAYERS ]));
+
     removeSessionKey();
     dispatch(sessionActions.logOut());
-    dispatch(teamActions.clearTeam());
-    navigate(Paths.HOME);
+    navigate(Paths.TEAMS);
   };
 
   const onSubmit = () => {
     form.validateFields()
       .then(async (values) => {
-        await login(values);
-        if (meta.isSuccess) {
-          form.resetFields();
-          setIsOpen(false);
-          navigate(Paths.HOME);
-        }
+        await login(values).unwrap();
+
+        form.resetFields();
+        setIsOpen(false);
+        navigate(Paths.MY_TEAM);
+
       })
       .catch((e: any) => {
         console.warn('failed', e);
       });
-
-
   };
 
   return(
@@ -55,7 +58,7 @@ const Login = () => {
             {
               type: 'link',
               icon:<LogOutIcon/>,
-              onClick: () => logOut()
+              onClick: logOut
             }}
         /> :
         <>
@@ -74,6 +77,8 @@ const Login = () => {
             cancelText='Loobu'
             onCancel={() => setIsOpen(false)}
             onOk={onSubmit}
+            confirmLoading={meta.isLoading}
+            cancelButtonProps={{ disabled: meta.isLoading }}
           >
             <LoginForm form={form}/>
           </Modal>

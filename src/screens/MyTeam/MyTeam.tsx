@@ -1,4 +1,4 @@
-import { Card, Col, Descriptions, Row, Skeleton, Space, Image, MenuProps, Button, Dropdown } from 'antd';
+import { Card, Col, Descriptions, Row, Skeleton, Space, Image, MenuProps, Button, Dropdown, Spin } from 'antd';
 import { useGetMyTeamQuery } from 'app/services/team';
 import TeamForm from './components/TeamForm';
 import PlayerTable from './components/PlayerTable';
@@ -8,13 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import AddGame from 'screens/Games/AddGame';
 import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 import { DownOutlined } from '@ant-design/icons';
+import { VolleyballIcon } from 'icons';
 
 const MyTeam = () => {
-  const { data, isFetching } = useGetMyTeamQuery();
+  const { data, isFetching, isLoading } = useGetMyTeamQuery();
   const navigate = useNavigate();
   const { isLarge } = useScreenBreakpoint();
-
-  if (isFetching) return <Skeleton active />;
 
   if (!isFetching && !data) return <TeamForm onClose={() => navigate(-1)} forceOpen/>;
 
@@ -71,12 +70,14 @@ const MyTeam = () => {
   return <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
     <Row gutter={[ 12, 12 ]}>
       <Col span={24}>
-        <Card
-          title="Info"
-          extra={renderExtra()}
-        >
-          {renderContent()}
-        </Card>
+        <Spin spinning={isFetching || isLoading} indicator={<VolleyballIcon spin/>}>
+          <Card
+            title="Info"
+            extra={renderExtra()}
+          >
+            {renderContent()}
+          </Card>
+        </Spin>
       </Col>
     </Row>
     <Space/>

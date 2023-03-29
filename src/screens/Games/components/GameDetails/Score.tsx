@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Col, Dropdown, MenuProps, Row, Space } from 'antd';
+import { Avatar, Button, Card, Col, Dropdown, MenuProps, Row, Space, Spin } from 'antd';
 import { GameDto } from 'app/services/game/types';
 import { TeamDto } from 'app/services/team/types';
 import '../../styles.less';
@@ -16,7 +16,7 @@ import StartNewSetButton from '../Actions/StartNewSetButton';
 import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 
 import { DownOutlined } from '@ant-design/icons';
-import { TeamsIcon } from 'icons';
+import { TeamsIcon, VolleyballIcon } from 'icons';
 
 
 const Score = ({ game }: { game: GameDto }) => {
@@ -24,9 +24,9 @@ const Score = ({ game }: { game: GameDto }) => {
   const viewersCount = useSelector(gameSelectors.getViwersCount);
   const userTeamId = useSelector(sessionSelectors.getUserTeamId);
   const { isMedium } = useScreenBreakpoint();
-  useGetCurrentSetQuery(game.id, { refetchOnMountOrArgChange: true });
+  const { isFetching, isLoading } = useGetCurrentSetQuery(game.id, { refetchOnMountOrArgChange: true });
 
-  const [ addScore ] = useManageGameScoreMutation();
+  const [ addScore, meta ] = useManageGameScoreMutation();
 
   const getAwayTeamName = () => {
     if (game.awayTeam) return game.awayTeam.name;
@@ -50,7 +50,6 @@ const Score = ({ game }: { game: GameDto }) => {
     }
     return <></>;
   };
-
 
   const getStartOrStopButton = () => {
     if (game.gameStatus === GameStatus.NotStarted) return <Can teamId={[ game.homeTeam.id ]}><StartGameButton gameId={game.id}/></Can>;
@@ -102,61 +101,68 @@ const Score = ({ game }: { game: GameDto }) => {
     return currentSet ? currentSet.awayTeamScore : '-';
   };
 
+  const getScores = () => {
+    return <>
+      <Col span={1} ><div className={'score-center'}>{getCorrectHomeTeamSocre()}</div></Col>
+      <Col span={2}>
+        <div className={'score-center'}>:</div>
+      </Col>
+      <Col span={1}><div className={'score-center'}>{getCorrectAwayTeamSocre()}</div></Col>
+    </>;
+  };
+
   return (
-    <Card className={`game-info${game.isGameLive ? ' live' : ''}`}
-      title={<span style={{ fontWeight: 'lighter', color: 'grey' }}>Vaatajaid: {viewersCount ? viewersCount : '-'}</span>}
-      extra={renderExtra()}>
-      <Row>
+    <Spin spinning={isFetching || isLoading} indicator={<VolleyballIcon spin/>}>
+      <Card className={`game-info${game.isGameLive ? ' live' : ''}`}
+        title={<span style={{ fontWeight: 'lighter', color: 'grey' }}>Vaatajaid: {viewersCount ? viewersCount : '-'}</span>}
+        extra={renderExtra()}>
+        <Row>
 
-        <Col span={10} >
-          <Row justify={'center'}>
-            <Avatar
-              src={game.homeTeam.teamLogoUri}
-              size={'large'}
-              icon={<TeamsIcon/>}
-              style={{ marginRight: '10px' }}
-            />
-          </Row>
-          <Row justify={'center'} className={'text-center'}>
-            <div style={{ fontWeight:'bold', marginRight: '10px' }}>{game.homeTeam.name} </div>
-          </Row>
-        </Col>
-        <Col span={1} ><div className={'score-center'}>{getCorrectHomeTeamSocre()}</div></Col>
-        <Col span={2}>
-          <div className={'score-center'}>:</div>
-        </Col>
-        <Col span={1}><div className={'score-center'}>{getCorrectAwayTeamSocre()}</div></Col>
+          <Col span={10} >
+            <Row justify={'center'}>
+              <Avatar
+                src={game.homeTeam.teamLogoUri}
+                size={'large'}
+                icon={<TeamsIcon/>}
+                style={{ marginRight: '10px' }}
+              />
+            </Row>
+            <Row justify={'center'} className={'text-center'}>
+              <div style={{ fontWeight:'bold', marginRight: '10px' }}>{game.homeTeam.name} </div>
+            </Row>
+          </Col>
+          {!isFetching && !isLoading ? getScores() : <Col span={4}></Col>}
 
-        <Col span={10} >
-          <Row justify={'center'}>
-            <Avatar
-              src={getTeamLogo(game.awayTeam)}
-              size={'large'}
-              icon={<TeamsIcon/>}
-              style={{ marginLeft: '10px' }}
-            />
-          </Row>
-          <Row justify={'center'} className={'text-center'}>
-            <div style={{ fontWeight:'bold', marginLeft: '10px' }}>{getAwayTeamName()}</div>
-          </Row>
-        </Col>
-      </Row>
-      <Can teamId={[ game.homeTeam.id ]}
-        gameStatus={game.gameStatus}
-        requiredStatus={GameStatus.Started}
-      >
-
-        <Row className={'text-center'}>
-          <Col span={10}>
-            <Button style={{ backgroundColor:'green', color:'white', fontWeight: 'bold', height: '50px', width: '50px' }} onClick={() => onTeamScoreClick(Method.Increment, Team.HomeTeam)}>+1</Button>
-            <Button style={{ backgroundColor:'red', color:'white', fontWeight: 'bold', height: '50px', width: '50px' }} onClick={() => onTeamScoreClick(Method.Decrement, Team.HomeTeam)}>-1</Button></Col>
-          <Col span={4}></Col>
-          <Col span={10}>
-            <Button style={{ backgroundColor:'green', color:'white', fontWeight: 'bold', height: '50px', width: '50px' }} onClick={() => onTeamScoreClick(Method.Increment, Team.AwayTeam)}>+1</Button>
-            <Button style={{ backgroundColor:'red', color:'white', fontWeight: 'bold', height: '50px', width: '50px' }} onClick={() => onTeamScoreClick(Method.Decrement, Team.AwayTeam)}>-1</Button></Col>
+          <Col span={10} >
+            <Row justify={'center'}>
+              <Avatar
+                src={getTeamLogo(game.awayTeam)}
+                size={'large'}
+                icon={<TeamsIcon/>}
+                style={{ marginLeft: '10px' }}
+              />
+            </Row>
+            <Row justify={'center'} className={'text-center'}>
+              <div style={{ fontWeight:'bold', marginLeft: '10px' }}>{getAwayTeamName()}</div>
+            </Row>
+          </Col>
         </Row>
-      </Can>
-    </Card>
+        <Can teamId={[ game.homeTeam.id ]}
+          gameStatus={game.gameStatus}
+          requiredStatus={GameStatus.Started}
+        >
+          <Row className={'text-center'}>
+            <Col span={10}>
+              <Button disabled={meta.isLoading} className={'stats-button positive'} onClick={() => onTeamScoreClick(Method.Increment, Team.HomeTeam)}>+1</Button>
+              <Button disabled={meta.isLoading} className={'stats-button negative'} onClick={() => onTeamScoreClick(Method.Decrement, Team.HomeTeam)}>-1</Button></Col>
+            <Col span={4}></Col>
+            <Col span={10}>
+              <Button disabled={meta.isLoading} className={'stats-button positive'} onClick={() => onTeamScoreClick(Method.Increment, Team.AwayTeam)}>+1</Button>
+              <Button disabled={meta.isLoading} className={'stats-button negative'} onClick={() => onTeamScoreClick(Method.Decrement, Team.AwayTeam)}>-1</Button></Col>
+          </Row>
+        </Can>
+      </Card>
+    </Spin>
   );
 };
 

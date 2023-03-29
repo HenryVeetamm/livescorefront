@@ -21,7 +21,6 @@ export const sessionSlice = createSlice({
     state.role = payload.role;
   },
   logOut: (state) => {
-    console.log('logout');
     state.firstName = undefined;
     state.lastName = undefined;
     state.role = undefined;
@@ -35,7 +34,6 @@ export const sessionSlice = createSlice({
       state.role = decoded['role'];
     });
     builder.addMatcher(teamApi.endpoints.getUserTeamId.matchFulfilled, (state, { payload }) => {
-      console.log(payload, 'GETUSERTEAMID');
       state.teamId = payload;
     });
   } });

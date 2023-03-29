@@ -6,6 +6,8 @@ import { gameType, gameTypeSelectList } from 'constants/gameTypes';
 import { useAddGameMutation } from 'app/services/game';
 import { useGetTeamsQuery, useGetUserTeamIdQuery } from 'app/services/team';
 import { formats } from 'utils/date';
+import { useNavigate } from 'react-router-dom';
+import { Paths } from 'constants/paths';
 
 
 const AddGame = () => {
@@ -15,6 +17,7 @@ const AddGame = () => {
   const [ addGame ] = useAddGameMutation();
   const [ form ] = Form.useForm();
   const { data : teamId } = useGetUserTeamIdQuery();
+  const navigate = useNavigate();
 
   if (!teamId) return null;
 
@@ -22,9 +25,11 @@ const AddGame = () => {
 
     form.validateFields()
       .then(async values => {
-        await addGame(values);
+        const res = await addGame(values).unwrap();
         setIsOpen(false);
         form.resetFields();
+
+        navigate(Paths.GAME.replace(':id', res.id));
       });
   };
 
