@@ -8,7 +8,7 @@ import CustomButton from 'components/Button/CustomButton';
 const UploadTeamLogo = ({ id }: { id: string }) => {
 
   const dispatch = useDispatch();
-  const handleSuccess = () => dispatch(teamApi.util.invalidateTags([ tags.TEAM ]));
+  const handleSuccess = () => dispatch(teamApi.util.invalidateTags([ tags.MY_TEAM ]));
 
   return <FileUpload
     uploadUrl={teamLogoUploadUrl.replace(':id',id)}

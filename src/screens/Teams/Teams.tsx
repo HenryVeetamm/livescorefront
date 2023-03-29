@@ -42,6 +42,7 @@ const Teams = () => {
       onRow={(data: any) => {return { onClick: () => navigate(Paths.TEAM.replace(':id', data.id)) };}}
       pagination={false}
       locale={{ emptyText: <><VolleyballIcon/> Võistkonnad puuduvad</> }}
+      rowKey="id"
     />
   </>;
 };

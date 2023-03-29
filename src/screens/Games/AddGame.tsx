@@ -14,7 +14,7 @@ const AddGame = () => {
   const [ isOpen, setIsOpen ] = useState(false);
   const [ currentGameType, setCurrentGameType ] = useState<number>(gameType.NOT_REGISTERED_TEAM);
   const { data, isLoading } = useGetTeamsQuery();
-  const [ addGame ] = useAddGameMutation();
+  const [ addGame, meta ] = useAddGameMutation();
   const [ form ] = Form.useForm();
   const { data : teamId } = useGetUserTeamIdQuery();
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ const AddGame = () => {
         const res = await addGame(values).unwrap();
         setIsOpen(false);
         form.resetFields();
-
         navigate(Paths.GAME.replace(':id', res.id));
       });
   };
@@ -73,6 +72,8 @@ const AddGame = () => {
       cancelText='Katkesta'
       onCancel={() => setIsOpen(false)}
       onOk={onSubmit}
+      confirmLoading={meta.isLoading}
+      cancelButtonProps={{ disabled: meta.isLoading }}
     >
       <Divider/>
       <Form

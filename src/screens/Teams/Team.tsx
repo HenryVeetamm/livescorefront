@@ -1,8 +1,9 @@
-import { Card, Col, Descriptions, Row, Space, Image } from 'antd';
+import { Card, Col, Descriptions, Row, Space, Image, Avatar } from 'antd';
 import { useGetTeamByIdQuery } from 'app/services/team';
 import { useParams } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import PlayerTable from './components/Players';
+import { TeamsIcon } from 'icons';
 
 const Team = () => {
   const params = useParams();
@@ -15,11 +16,12 @@ const Team = () => {
     if (!isFetching && data) return <Space direction='vertical' size='middle' style={{ display : 'flex' }}>
       <Descriptions size={'small'}>
         <Descriptions.Item>
-          <Image
-            width={200}
-            src={data.teamLogoUri ? data.teamLogoUri : 'https://joesch.moe/api/v1/random'}
-            preview={false}
-          />
+          {data.teamLogoUri ?
+            <Image
+              width={200}
+              src={ data.teamLogoUri}
+              preview={false}
+            /> : <Avatar icon={<TeamsIcon/>} size={'large'}/>}
         </Descriptions.Item>
         <Descriptions.Item label='Nimi'>
           {data.name}

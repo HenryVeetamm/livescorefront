@@ -29,13 +29,14 @@ const PlayerForm = ({ button, initialValues } : PlayerFormProps) => {
 
   const onSubmit = () => {
     form.validateFields().then(async values => {
-      form.resetFields();
       if (initialValues) {
         await editPlayer({ ...values, id: initialValues.id, teamId });
       }
       else await addPlayer({ teamId, ...values });
+      form.resetFields();
+    }).catch((e: any) => {
+      console.warn('failed', e);
     });
-    setIsOpen(false);
   };
 
   const getButton = () => {
@@ -59,6 +60,8 @@ const PlayerForm = ({ button, initialValues } : PlayerFormProps) => {
       cancelText='Loobu'
       onCancel={() => setIsOpen(false)}
       onOk={onSubmit}
+      confirmLoading={addMeta.isLoading || editMeta.isLoading}
+      cancelButtonProps={{ disabled: addMeta.isLoading || editMeta.isLoading }}
     >
       <Form
         layout='vertical'

@@ -24,7 +24,8 @@ export const sessionSlice = createSlice({
     state.firstName = undefined;
     state.lastName = undefined;
     state.role = undefined;
-    state.teamId = undefined;}
+    state.teamId = undefined;
+  }
   },
   extraReducers: (builder) => {
     builder.addMatcher(sessionApi.endpoints.login.matchFulfilled, (state, { payload }) => {

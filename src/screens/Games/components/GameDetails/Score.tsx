@@ -17,6 +17,7 @@ import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 
 import { DownOutlined } from '@ant-design/icons';
 import { TeamsIcon, VolleyballIcon } from 'icons';
+import DeleteGameButton from '../Actions/DeleteGame';
 
 
 const Score = ({ game }: { game: GameDto }) => {
@@ -42,11 +43,18 @@ const Score = ({ game }: { game: GameDto }) => {
     await addScore({ gameId: game.id, method: method, team: team });
   };
 
-  const renderAddPlayers = () => {
+  const getAddPlayers = () => {
     if (((game.awayTeam && game.awayTeam.id && game.awayTeam.id === userTeamId) ||
      game.homeTeam.id === userTeamId)) {
       if (game.gameStatus !== GameStatus.NotStarted) return <></>;
       return <AddPlayerForm gameId={game.id}/>;
+    }
+    return <></>;
+  };
+
+  const getDeleteButton = () => {
+    if (game.gameStatus === GameStatus.NotStarted && game.homeTeam.id === userTeamId) {
+      return <DeleteGameButton gameId={game.id}/>;
     }
     return <></>;
   };
@@ -65,11 +73,12 @@ const Score = ({ game }: { game: GameDto }) => {
   const items: MenuProps['items'] = [
     { label: getStartOrStopButton(), key: '1' },
     { label: getSetButton(), key: '2' },
-    { label: renderAddPlayers(), key: '3' } ];
+    { label: getAddPlayers(), key: '3' },
+    { label: getDeleteButton(), key: '4' } ];
 
   const getDropDown = () =>{
     if (game.gameStatus !== GameStatus.Ended) {
-      <Dropdown menu={{ items }} trigger={[ 'click' ]}>
+      return <Dropdown menu={{ items }} trigger={[ 'click' ]}>
         <Button icon={<DownOutlined />} type="primary">
               Tegevused
         </Button>
@@ -84,9 +93,9 @@ const Score = ({ game }: { game: GameDto }) => {
       {isMedium ? <Space wrap>
         {getStartOrStopButton()}
         {getSetButton()}
-        {renderAddPlayers()}
-      </Space>
-        : getDropDown()
+        {getAddPlayers()}
+        {getDeleteButton()}
+      </Space> : getDropDown()
       }
     </Can>;
   };

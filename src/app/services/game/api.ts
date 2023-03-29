@@ -122,6 +122,16 @@ export const gameApi = createApi({
         return response;
       }
     }),
+    deleteGame: builder.mutation<GameDto, string>({
+      query: (gameId) => ({
+        url: `/${gameId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [ tags.GAMES, tags.MYGAMES ],
+      transformResponse: (response : any) => {
+        return response;
+      }
+    }),
   })
 });
 
@@ -138,5 +148,6 @@ export const {
   useGetMyGamesQuery,
   useGetCompletedSetsByGameIdQuery,
   useEndGameMutation,
-  useLazyGetGamesQuery
+  useLazyGetGamesQuery,
+  useDeleteGameMutation,
 } = gameApi;

@@ -32,7 +32,7 @@ const PlayerDetails = ({ player } : { player: PlayerDto }) => {
       return <div className="avatar-custom">
         <Image
           className="image-radius"
-          src={player.profileAbsoulteUri ? player.profileAbsoulteUri : 'https://joesch.moe/api/v1/random'}
+          src={player.profileAbsoulteUri}
           preview={false}/>
       </div>;
     }

@@ -16,7 +16,7 @@ import './styles.less';
 
 
 const MenuNavigation = () => {
-  const isAuthenticated = useSelector(selectors.isAuthenticated);
+  const authData = useSelector(selectors.getAuthData);
   const { isLarge } = useScreenBreakpoint();
 
 
@@ -53,7 +53,7 @@ const MenuNavigation = () => {
     },
   ];
 
-  if (isAuthenticated) {
+  if (authData && authData.role === 'admin') {
     const authenticatedMenus: MenuProps['items'] = [
       {
         label: <NavLink to={Paths.MY_TEAM}>Minu võistkond</NavLink>,

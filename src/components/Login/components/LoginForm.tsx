@@ -1,6 +1,4 @@
 import { Form, Input } from 'antd';
-// import { useLoginMutation } from 'app/services/session/api';
-// import { LoginDto } from 'app/services/session/types';
 
 const LoginForm = ({ form } : any) => {
 

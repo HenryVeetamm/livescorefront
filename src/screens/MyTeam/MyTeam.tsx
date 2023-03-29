@@ -1,4 +1,4 @@
-import { Card, Col, Descriptions, Row, Skeleton, Space, Image, MenuProps, Button, Dropdown, Spin } from 'antd';
+import { Card, Col, Descriptions, Row, Skeleton, Space, Image, MenuProps, Button, Dropdown, Spin, Avatar } from 'antd';
 import { useGetMyTeamQuery } from 'app/services/team';
 import TeamForm from './components/TeamForm';
 import PlayerTable from './components/PlayerTable';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import AddGame from 'screens/Games/AddGame';
 import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 import { DownOutlined } from '@ant-design/icons';
-import { VolleyballIcon } from 'icons';
+import { TeamsIcon, VolleyballIcon } from 'icons';
 
 const MyTeam = () => {
   const { data, isFetching, isLoading } = useGetMyTeamQuery();
@@ -27,12 +27,12 @@ const MyTeam = () => {
     if (!isFetching && data) return <Space direction='vertical' size='middle' style={{ display : 'flex' }}>
       <Descriptions size={'small'}>
         <Descriptions.Item>
-          <Image
-            width={200}
-            src={data.teamLogoUri ? data.teamLogoUri : ''}
-            placeholder={'teslk'}
-            preview={false}
-          />
+          {data.teamLogoUri ?
+            <Image
+              width={200}
+              src={ data.teamLogoUri}
+              preview={false}
+            /> : <Avatar icon={<TeamsIcon/>} size={'large'}/>}
         </Descriptions.Item>
         <Descriptions.Item label='Nimi'>
           {data.name}

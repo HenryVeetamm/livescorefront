@@ -12,15 +12,15 @@ const TeamForm = ({ initialValues, onClose, forceOpen } : { initialValues?: any,
   const [ updateTeam, updateMeta ] = useUpdateMyTeamMutation();
 
   useEffect(() => {
-    if (createMeta.isSuccess || updateMeta.isSuccess)setIsOpen(false);
+    if (createMeta.isSuccess || updateMeta.isSuccess) setIsOpen(false);
   }
   , [ createMeta.isSuccess, createMeta.isSuccess ]);
 
   const onSubmit = () => {
     form.validateFields().then(async values => {
-      form.resetFields();
       if (initialValues) await updateTeam({ id: initialValues.id,...values });
       else await createTeam(values).unwrap();
+      form.resetFields();
     });
   };
 
@@ -54,6 +54,8 @@ const TeamForm = ({ initialValues, onClose, forceOpen } : { initialValues?: any,
       cancelText='Loobu'
       onCancel={() => forceOpen && onClose ? onClose() : setIsOpen(false)}
       onOk={onSubmit}
+      confirmLoading={updateMeta.isLoading || createMeta.isLoading}
+      cancelButtonProps={{ disabled: updateMeta.isLoading || createMeta.isLoading }}
     >
       <Divider/>
       <Form
