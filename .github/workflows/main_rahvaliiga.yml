@@ -24,10 +24,8 @@ jobs:
           npm run test --if-present
           
       - name: Copy file
-        uses: canastro/copy-action@0.0.2
-        with:
-          source: web.config 
-          target: build/
+        run: |
+          copy web.config build
       
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.7.1
