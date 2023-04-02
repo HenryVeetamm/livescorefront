@@ -1,8 +1,8 @@
-import { Divider, Form, Input, Modal } from 'antd';
+import { Button, Divider, Form, Input, Modal } from 'antd';
 import { useCreateMyTeamMutation, useUpdateMyTeamMutation } from 'app/services/team';
-import CustomButton from 'components/Button/CustomButton';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
+import { showSuccess } from 'utils/messages';
 
 
 const TeamForm = ({ initialValues, onClose, forceOpen } : { initialValues?: any, onClose?: () => void, forceOpen?: boolean }) => {
@@ -21,7 +21,9 @@ const TeamForm = ({ initialValues, onClose, forceOpen } : { initialValues?: any,
       if (initialValues) await updateTeam({ id: initialValues.id,...values });
       else await createTeam(values).unwrap();
       form.resetFields();
-    });
+    }).then(() => {
+      showSuccess('Salvestatud');
+    }).catch();
   };
 
   const getTitle = () => {
@@ -33,14 +35,13 @@ const TeamForm = ({ initialValues, onClose, forceOpen } : { initialValues?: any,
   };
 
   const getOpenButton = () => {
-    if (!forceOpen) return <CustomButton title={getTitle()}
-      buttonProps={{
-        icon: getButtonIcon(),
-        onClick: () => setIsOpen(true),
-        type: 'link'
+    if (!forceOpen) return <Button
 
-      }}
-    />;
+      icon={getButtonIcon()}
+      onClick={() => setIsOpen(true)}
+      type={'link'}
+
+    >{getTitle()}</Button>;
   };
 
 

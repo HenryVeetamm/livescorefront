@@ -3,6 +3,7 @@ import Authorize from 'containers/Authorized/Authorize';
 import AuthorizedStrict from 'containers/Authorized/AuthorizedStrict';
 import NotFound from 'containers/NotFound/NotFound';
 import { Route, Routes } from 'react-router-dom';
+import AdminView from 'screens/Admin/View';
 import Game from 'screens/Games/Game';
 import Games from 'screens/Games/Games';
 import Home from 'screens/Home/Home';
@@ -20,6 +21,8 @@ const Router = () => {
 
         <Route path={Paths.MY_TEAM} element={<MyTeam/>}/>
         <Route path={Paths.MY_GAMES} element={<MyGames/>}/>
+
+        <Route path={Paths.ADMIN} element={<AdminView/>}/>
 
       </Route>
       <Route element={<Authorize><Layout/></Authorize>}>

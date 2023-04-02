@@ -19,7 +19,6 @@ const MenuNavigation = () => {
   const authData = useSelector(selectors.getAuthData);
   const { isLarge } = useScreenBreakpoint();
 
-
   //ANON/ALL
   //1.Kõik mängud: /games
   //2.Informatsioon:Mingi basic suur tekst. Miks/Milleks/Kuidas/Muu info: /info
@@ -53,7 +52,7 @@ const MenuNavigation = () => {
     },
   ];
 
-  if (authData && authData.role === 'admin') {
+  if (authData && authData.role === 'user') {
     const authenticatedMenus: MenuProps['items'] = [
       {
         label: <NavLink to={Paths.MY_TEAM}>Minu võistkond</NavLink>,
@@ -63,6 +62,17 @@ const MenuNavigation = () => {
       {
         label: <NavLink to={Paths.MY_GAMES}>Minu mängud</NavLink>,
         key: Paths.MY_GAMES,
+        icon: <VolleyballIcon/>
+      },
+    ];
+    menuItems.push(...authenticatedMenus);
+  }
+
+  if (authData && authData.role === 'admin') {
+    const authenticatedMenus: MenuProps['items'] = [
+      {
+        label: <NavLink to={Paths.ADMIN}>Admin</NavLink>,
+        key: Paths.ADMIN,
         icon: <VolleyballIcon/>
       },
     ];

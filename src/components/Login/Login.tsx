@@ -12,6 +12,7 @@ import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 import { LoginIcon, LogOutIcon } from 'icons';
 import { tags as teamTags, teamApi } from 'app/services/team';
 import { playerApi, tags } from 'app/services/player';
+import { showSuccess } from 'utils/messages';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -23,29 +24,26 @@ const Login = () => {
   const [ login, meta ] = useLoginMutation();
   const [ form ] = Form.useForm();
 
-
   const logOut = () => {
     dispatch(teamApi.util.invalidateTags([ teamTags.MY_TEAM ]));
     dispatch(playerApi.util.invalidateTags([ tags.MY_PLAYERS ]));
 
     removeSessionKey();
     dispatch(sessionActions.logOut());
-    navigate(Paths.TEAMS);
+    navigate(Paths.HOME);
   };
 
   const onSubmit = () => {
     form.validateFields()
       .then(async (values) => {
         await login(values).unwrap();
-
         form.resetFields();
         setIsOpen(false);
         navigate(Paths.MY_TEAM);
-
+      }).then(() => {
+        showSuccess('Tere tulemast!');
       })
-      .catch((e: any) => {
-        console.warn('failed', e);
-      });
+      .catch();
   };
 
   return(

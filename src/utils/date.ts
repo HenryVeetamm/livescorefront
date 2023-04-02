@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { isMoment } from 'moment';
 
 export const formats = {
   DD_MM_YYYY: 'DD.MM.YYYY',
@@ -16,3 +16,12 @@ export const calculateAge = (date : Date) => {
 export const getDateTime = (date: Date) => {
   return moment(date).format(formats.DD_MM_YYYY_HH_MM);
 };
+
+export const getDateByFormat = (date: Date, format: string) => {
+  return moment(date).format(format);
+};
+
+export const isDate = (date : any) => {
+  return date instanceof Date || isMoment(date);
+};
+

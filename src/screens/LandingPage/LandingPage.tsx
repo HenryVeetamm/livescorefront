@@ -1,11 +1,16 @@
-import { Card } from 'antd';
 import { selectors } from 'app/services/session/slice';
 import { useSelector } from 'react-redux';
 
 const LandingPage = () => {
-  const auht = useSelector(selectors.getAuthData);
+  const auth = useSelector(selectors.getAuthData);
+  const getContent = () => {
+    return auth.firstName ? <h1 style={{ textAlign: 'center' }}>Tere tulemast, {auth.firstName}! </h1> : <>
+      <h1 style={{ textAlign: 'center', color: 'white' }}>Tere tulemast </h1>
+      <h2 style={{ textAlign: 'center', color: 'white' }}>võrkpalli punktiseisu ja statistika veebirakendusse!</h2>
+    </>;
+  };
 
-  return <Card>Landing page, {auht.firstName ? auht.firstName : 'noName'}</Card>;
+  return getContent();
 };
 
 export default LandingPage;

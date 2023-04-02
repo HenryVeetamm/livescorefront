@@ -55,7 +55,7 @@ const PlayerCard = ({ player, hideActions }: { player : PlayerInfoProps, hideAct
     <Meta
       avatar={getAvatar()}
       title={`#${player.shirtNumber} ${positionValues[player.position]}`}
-      description={`Vanus: ${calculateAge(player.dateOfBirth)},${getDate(player.dateOfBirth)}`}
+      description={`Vanus: ${calculateAge(player.dateOfBirth)}, ${getDate(player.dateOfBirth)}`}
     />
   </Card>;
 };

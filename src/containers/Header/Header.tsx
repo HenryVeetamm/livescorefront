@@ -12,9 +12,3 @@ const LayoutHeader = () => {
 };
 
 export default LayoutHeader;
-
-
-{/* <Header style={{ backgroundColor: '#ffffff' }}>
-<MenuNavigation/>
-<Login/>
-</Header> */}

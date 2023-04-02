@@ -1,5 +1,4 @@
-import { Modal, Divider, Input, Form, Select, DatePicker } from 'antd';
-import CustomButton from 'components/Button/CustomButton';
+import { Modal, Divider, Input, Form, Select, DatePicker, Button } from 'antd';
 import { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { gameType, gameTypeSelectList } from 'constants/gameTypes';
@@ -8,6 +7,9 @@ import { useGetTeamsQuery, useGetUserTeamIdQuery } from 'app/services/team';
 import { formats } from 'utils/date';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from 'constants/paths';
+import { showSuccess } from 'utils/messages';
+import MobileDatePicker from 'components/Mobile/MobileDatePicker';
+import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 
 
 const AddGame = () => {
@@ -18,6 +20,7 @@ const AddGame = () => {
   const [ form ] = Form.useForm();
   const { data : teamId } = useGetUserTeamIdQuery();
   const navigate = useNavigate();
+  const { isMobile } = useScreenBreakpoint();
 
   if (!teamId) return null;
 
@@ -29,7 +32,9 @@ const AddGame = () => {
         setIsOpen(false);
         form.resetFields();
         navigate(Paths.GAME.replace(':id', res.id));
-      });
+      }).then(() => {
+        showSuccess('Mäng lisatud');
+      }).catch();
   };
 
   const handleTypeChange = (value : any) => {
@@ -58,13 +63,13 @@ const AddGame = () => {
 
 
   return <>
-    <CustomButton title={'Loo mäng'}
-      buttonProps={{
-        icon: <PlusOutlined />,
-        onClick: () => setIsOpen(true),
-        type: 'link'
-      }}
-    />
+    <Button
+      icon={<PlusOutlined />}
+      onClick={ () => setIsOpen(true)}
+      type= 'link'
+    >
+    Loo mäng
+    </Button>
     <Modal
       title={'Loo mäng'}
       open={isOpen}
@@ -103,7 +108,10 @@ const AddGame = () => {
           name="scheduledTime"
           rules={[ { required: true, message: 'Väli on kohustuslik' } ]}
         >
-          <DatePicker showTime style={{ width: '100%' }} showSecond={false} showNow={false} format={formats.DD_MM_YYYY_HH_MM}/>
+          {
+            isMobile? <MobileDatePicker precision='minute' format={formats.DD_MM_YYYY_HH_MM} showFuture/> :
+              <DatePicker showTime style={{ width: '100%' }} showSecond={false} showNow={false} format={formats.DD_MM_YYYY_HH_MM}/>
+          }
         </Form.Item>
       </Form>
     </Modal>

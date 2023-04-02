@@ -44,7 +44,8 @@ export const actions = sessionSlice.actions;
 export const selectors = {
   getAuthData: (state: RootState) => state.session,
   isAuthenticated: (state: RootState) => state.session.firstName != null,
-  getUserTeamId: (state: RootState) => state.session.teamId
+  getUserTeamId: (state: RootState) => state.session.teamId,
+  isUserAdmin: (state : RootState) => state.session.role && state.session.role === 'admin',
 };
 
 

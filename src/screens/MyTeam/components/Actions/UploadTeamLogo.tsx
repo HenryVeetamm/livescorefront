@@ -3,7 +3,7 @@ import FileUpload, { FileType } from 'components/FileUpload/FileUpload';
 import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { tags, teamApi, teamLogoUploadUrl } from 'app/services/team';
-import CustomButton from 'components/Button/CustomButton';
+import { Button } from 'antd';
 
 const UploadTeamLogo = ({ id }: { id: string }) => {
 
@@ -14,10 +14,10 @@ const UploadTeamLogo = ({ id }: { id: string }) => {
     uploadUrl={teamLogoUploadUrl.replace(':id',id)}
     type={FileType.IMAGE}
     handleSuccess={handleSuccess}
-    button={<CustomButton
+    button={<Button
       title='Lae üles tiimi logo'
-      buttonProps={{ icon:<UploadOutlined />, type: 'link' }} />}/>;
-
+      icon={<UploadOutlined />}
+      type={'link'}>Lae üles tiimi logo</Button>} />;
 };
 
 export default UploadTeamLogo;

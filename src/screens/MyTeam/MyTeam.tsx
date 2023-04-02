@@ -6,14 +6,24 @@ import PlayerForm from './components/PlayerForm';
 import UploadTeamLogo from './components/Actions/UploadTeamLogo';
 import { useNavigate } from 'react-router-dom';
 import AddGame from 'screens/Games/AddGame';
-import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 import { DownOutlined } from '@ant-design/icons';
 import { TeamsIcon, VolleyballIcon } from 'icons';
+import UpdatePassword from './components/Actions/UpdatePassword';
+import { useSelector } from 'react-redux';
+import { selectors } from 'app/services/session';
+import { Paths } from 'constants/paths';
+import { useEffect } from 'react';
 
 const MyTeam = () => {
   const { data, isFetching, isLoading } = useGetMyTeamQuery();
+  const isAdmin = useSelector(selectors.isUserAdmin);
   const navigate = useNavigate();
-  const { isLarge } = useScreenBreakpoint();
+  console.log(isAdmin);
+
+  useEffect(() => {
+    if (isAdmin) navigate(Paths.HOME);
+  }, []);
+
 
   if (!isFetching && !data) return <TeamForm onClose={() => navigate(-1)} forceOpen/>;
 
@@ -50,21 +60,14 @@ const MyTeam = () => {
       { label: renderActions(), key: '1' },
       { label: data && <UploadTeamLogo id={data.id}/>, key: '2' },
       { label: data && <PlayerForm/>, key: '3' },
-      { label:<AddGame />, key: '4' } ];
+      { label:<AddGame />, key: '4' },
+      { label: <UpdatePassword/>, key: '5' } ];
 
-    return (isLarge ?
-      <Space wrap>
-        {renderActions()}
-        {data && <UploadTeamLogo id={data.id}/>}
-        {data && <PlayerForm/>}
-        { <AddGame />}
-      </Space>:
-      <Dropdown menu={{ items }} trigger={[ 'click' ]}>
-        <Button icon={<DownOutlined />} type="primary">
+    return <Dropdown menu={{ items }} trigger={[ 'click' ]}>
+      <Button icon={<DownOutlined />} type="primary">
               Tegevused
-        </Button>
-      </Dropdown>
-    );
+      </Button>
+    </Dropdown>;
   };
 
   return <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
@@ -72,8 +75,8 @@ const MyTeam = () => {
       <Col span={24}>
         <Spin spinning={isFetching || isLoading} indicator={<VolleyballIcon spin/>}>
           <Card
-            title="Info"
-            extra={renderExtra()}
+            title={'Info'}
+            extra={!(isFetching || isLoading) && renderExtra()}
           >
             {renderContent()}
           </Card>

@@ -15,21 +15,22 @@ const PlayerTable = ({ gameId, teamId, gameStatus }: { gameId: string, teamId: s
   const userTeamId = useSelector(sessionSelectors.getUserTeamId);
 
 
-  if (!players && isLoading) return <Skeleton active/>;
+  if (!players && isLoading) return <Skeleton active />;
   if ((!players || isEmpty(players)) && !isLoading) return <Card>Võistkond pole mängijaid märkinud</Card>;
 
   return <div className='stats-container'><Space direction="vertical" size='middle' style={{ display: 'flex' }}>
 
-    {players.map((player : any) =>
-    {return userTeamId !== teamId || gameStatus !== GameStatus.Started? <PlayerViewMode playerInGame={player} /> : <PlayerRow
-      key={player.id}
-      playerInGame={player}
-      gameId={gameId}
-      teamId={teamId}
-    />;})
-
+    {
+      players.map((player: any) => {
+        return userTeamId !== teamId || gameStatus !== GameStatus.Started ? <PlayerViewMode key={player.id} playerInGame={player} /> :
+          <PlayerRow
+            key={player.id}
+            playerInGame={player}
+            gameId={gameId}
+            teamId={teamId}
+          />;
+      })
     }
-
   </Space>
   </div>;
 };

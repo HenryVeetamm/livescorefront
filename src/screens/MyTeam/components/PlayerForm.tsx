@@ -1,4 +1,4 @@
-import { DatePicker, Form, Input, InputNumber, Modal, Select } from 'antd';
+import { Button, DatePicker, Form, Input, InputNumber, Modal, Select } from 'antd';
 import { useAddPlayerMutation, useEditPlayerMutation } from 'app/services/player';
 import { PlayerFormType } from 'app/services/player/types';
 import { selectors as teamSelectors } from 'app/services/team';
@@ -6,8 +6,10 @@ import { positionSelectList } from 'constants/playerPosition';
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { UserAddOutlined } from '@ant-design/icons';
-import CustomButton from 'components/Button/CustomButton';
-
+import { showSuccess } from 'utils/messages';
+import MobileDatePicker from 'components/Mobile/MobileDatePicker';
+import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
+import { formats } from 'utils/date';
 
 type PlayerFormProps = {
   button? : ReactElement | undefined
@@ -15,6 +17,8 @@ type PlayerFormProps = {
 }
 
 const PlayerForm = ({ button, initialValues } : PlayerFormProps) => {
+  const { isMobile } = useScreenBreakpoint();
+
   const [ isOpen, setIsOpen ] = useState(false);
   const [ form ] = Form.useForm();
 
@@ -29,27 +33,40 @@ const PlayerForm = ({ button, initialValues } : PlayerFormProps) => {
 
   const onSubmit = () => {
     form.validateFields().then(async values => {
+      console.log(values);
       if (initialValues) {
         await editPlayer({ ...values, id: initialValues.id, teamId });
       }
       else await addPlayer({ teamId, ...values });
       form.resetFields();
-    }).catch((e: any) => {
-      console.warn('failed', e);
-    });
+    }).then(() => {
+      showSuccess('Salvestatud');
+    }).catch();
   };
 
   const getButton = () => {
     if (button) return React.cloneElement(button, { onClick: () => setIsOpen(true) });
 
-    return <CustomButton
+    return <Button
       title='Lisa mängija'
-      buttonProps={{
-        icon: <UserAddOutlined />,
-        onClick:() => setIsOpen(true),
-        type: 'link'
-      }}
-    />;
+
+      icon={<UserAddOutlined />}
+      onClick={() => setIsOpen(true)}
+      type={'link'}
+
+    >Lisa mängija</Button>
+    ;
+  };
+
+  const getDateField = () => {
+    return <Form.Item
+      label="Sünnipäev"
+      name="dateOfBirth"
+      rules={[ { required: true, message: 'Väli on kohustuslik' } ]}
+    >
+      {isMobile? <MobileDatePicker precision='day' format={formats.DD_MM_YYYY}/> :<DatePicker style={{ width: '100%' }}
+        format={'DD.MM.YYYY'}/>}
+    </Form.Item>;
   };
 
   return <>
@@ -58,7 +75,10 @@ const PlayerForm = ({ button, initialValues } : PlayerFormProps) => {
       open={isOpen}
       okText='Salvesta'
       cancelText='Loobu'
-      onCancel={() => setIsOpen(false)}
+      onCancel={() => {
+        form.resetFields();
+        setIsOpen(false);
+      }}
       onOk={onSubmit}
       confirmLoading={addMeta.isLoading || editMeta.isLoading}
       cancelButtonProps={{ disabled: addMeta.isLoading || editMeta.isLoading }}
@@ -90,14 +110,7 @@ const PlayerForm = ({ button, initialValues } : PlayerFormProps) => {
         >
           <Select options={positionSelectList}/>
         </Form.Item>
-        <Form.Item
-          label="Sünnipäev"
-          name="dateOfBirth"
-          rules={[ { required: true, message: 'Väli on kohustuslik' } ]}
-        >
-          <DatePicker style={{ width: '100%' }}
-            format={'DD.MM.YYYY'}/>
-        </Form.Item>
+        {getDateField()}
         <Form.Item
           label="Särginumber"
           name="shirtNumber"

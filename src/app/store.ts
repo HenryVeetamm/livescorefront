@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { exceptionsMiddleware } from './middlewares/exceptionMiddleware';
 import { onlineGameMiddleware } from './middlewares/onlineGameMiddleware';
+import { adminApi } from './services/admin';
 import { gameApi } from './services/game';
 import { gameSlice } from './services/game/slice';
 import { playerApi, playerSlice } from './services/player';
@@ -19,6 +20,7 @@ export const store= configureStore({
     [teamSlice.name]: teamSlice.reducer,
     [gameApi.reducerPath]: gameApi.reducer,
     [gameSlice.name]: gameSlice.reducer,
+    [adminApi.reducerPath]: adminApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -28,7 +30,8 @@ export const store= configureStore({
       sessionApi.middleware,
       playerApi.middleware,
       teamApi.middleware,
-      gameApi.middleware
+      gameApi.middleware,
+      adminApi.middleware
     ]),
 });
 

@@ -12,7 +12,7 @@ const Teams = () => {
 
   const columns = [
     {
-      title: <VolleyballIcon/>,
+      title: <TeamsIcon/>,
       dataIndex: 'teamLogoUri',
       key: 'teamLogoUri',
       render: (data : any,) => { return <Avatar
@@ -35,7 +35,7 @@ const Teams = () => {
 
   ];
 
-  return <>
+  return <Card title='Võistkonnad'>
     <Table
       columns={columns}
       dataSource={data}
@@ -44,7 +44,7 @@ const Teams = () => {
       locale={{ emptyText: <><VolleyballIcon/> Võistkonnad puuduvad</> }}
       rowKey="id"
     />
-  </>;
+  </Card>;
 };
 
 export default Teams;

@@ -7,7 +7,6 @@ type EditPlayerProps = {
 
 const EditPlayer = ({ onClick } : EditPlayerProps) => {
   return<>
-
     <TooltipButton
       title={'Muuda'}
       buttonProps={{

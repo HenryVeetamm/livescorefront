@@ -13,4 +13,6 @@ export class Paths {
 
   static readonly TEAMS = '/teams';
   static readonly TEAM = '/teams/:id';
+
+  static readonly ADMIN = '/admin';
 }
