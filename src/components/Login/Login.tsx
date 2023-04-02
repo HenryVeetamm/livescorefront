@@ -18,17 +18,16 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isMedium } = useScreenBreakpoint();
+  const { isLarge } = useScreenBreakpoint();
   const isAuthenticated = useSelector(selectors.isAuthenticated);
   const [ isOpen, setIsOpen ] = useState(false);
   const [ login, meta ] = useLoginMutation();
   const [ form ] = Form.useForm();
 
   const logOut = () => {
+    removeSessionKey();
     dispatch(teamApi.util.invalidateTags([ teamTags.MY_TEAM ]));
     dispatch(playerApi.util.invalidateTags([ tags.MY_PLAYERS ]));
-
-    removeSessionKey();
     dispatch(sessionActions.logOut());
     navigate(Paths.HOME);
   };
@@ -51,7 +50,7 @@ const Login = () => {
       {isAuthenticated ?
         <CustomButton
           title='Logi välja'
-          breakPoint={!isMedium}
+          breakPoint={!isLarge}
           buttonProps={
             {
               type: 'link',

@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 
 
 const PlayerTable = () => {
-  const { data, isFetching } = useGetMyTeamPlayersQuery();
+  const { data, isFetching } = useGetMyTeamPlayersQuery({}, { refetchOnMountOrArgChange: true });
 
   if (isFetching) return <Skeleton active/>;
   if (!data || data && isEmpty(data)) return <Col span={24}><Card>Mängijaid ei leitud</Card></Col>;

@@ -1,6 +1,7 @@
 import {
   HomeOutlined,
   TeamOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 
 import { Menu, MenuProps } from 'antd';
@@ -18,21 +19,6 @@ import './styles.less';
 const MenuNavigation = () => {
   const authData = useSelector(selectors.getAuthData);
   const { isLarge } = useScreenBreakpoint();
-
-  //ANON/ALL
-  //1.Kõik mängud: /games
-  //2.Informatsioon:Mingi basic suur tekst. Miks/Milleks/Kuidas/Muu info: /info
-  //3.Avalehele. (Anonüümne saadetakse landing pagele) (Audenditud kasutajad saadetakse dashboardile): / või /dashboard
-  //Koheselt mitte vajalik. Võistkonnad, võistkondade detailvaade.
-
-  //Audenditud kasutajad
-  //4.Minu võistkond. Saab lisada/vaadata/muuta mängijaid: /my-team
-  //5.Minu mängud. Toimunud/Tulemas mängud: /my-games
-  //6.Dashboard: Sama mis avalehele
-  //Mingi vaade, et lisada mänge, või siis lisada asi dashboardile. Kas ka lisada mängude confirmimine.
-  //Also võimalus lisada kiirelt mäng. Mida saab ise täita.
-
-  //Admin menüüd?
 
   const menuItems: MenuProps['items'] = [
     {
@@ -71,9 +57,9 @@ const MenuNavigation = () => {
   if (authData && authData.role === 'admin') {
     const authenticatedMenus: MenuProps['items'] = [
       {
-        label: <NavLink to={Paths.ADMIN}>Admin</NavLink>,
+        label: <NavLink to={Paths.ADMIN}>Kasutajad</NavLink>,
         key: Paths.ADMIN,
-        icon: <VolleyballIcon/>
+        icon: <UserOutlined/>
       },
     ];
     menuItems.push(...authenticatedMenus);

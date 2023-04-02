@@ -46,38 +46,44 @@ const Score = ({ game }: { game: GameDto }) => {
   const getAddPlayers = () => {
     if (((game.awayTeam && game.awayTeam.id && game.awayTeam.id === userTeamId) ||
      game.homeTeam.id === userTeamId)) {
-      if (game.gameStatus !== GameStatus.NotStarted) return <></>;
+      if (game.gameStatus !== GameStatus.NotStarted) return undefined;
       return <AddPlayerForm gameId={game.id}/>;
     }
-    return <></>;
+    return undefined;
   };
 
   const getDeleteButton = () => {
     if (game.gameStatus === GameStatus.NotStarted && game.homeTeam.id === userTeamId) {
       return <DeleteGameButton gameId={game.id}/>;
     }
-    return <></>;
+    return undefined;
   };
 
   const getStartOrStopButton = () => {
     if (game.gameStatus === GameStatus.NotStarted) return <Can teamId={[ game.homeTeam.id ]}><StartGameButton gameId={game.id}/></Can>;
     if (game.gameStatus === GameStatus.Started) return <Can teamId={[ game.homeTeam.id ]}><EndGameButton gameId={game.id}/></Can>;
-    return <></>;
+    return undefined;
   };
 
   const getSetButton = () => {
     if (game.gameStatus === GameStatus.Started) return <Can teamId={[ game.homeTeam.id ]}><StartNewSetButton gameId={game.id}/></Can>;
-    return <></>;
+    return undefined;
   };
 
-  const items: MenuProps['items'] = [
-    { label: getStartOrStopButton(), key: '1' },
-    { label: getSetButton(), key: '2' },
-    { label: getAddPlayers(), key: '3' },
-    { label: getDeleteButton(), key: '4' } ];
-
   const getDropDown = () =>{
+    if (game.gameStatus !== GameStatus.NotStarted && userTeamId !== game.homeTeam.id) return undefined;
     if (game.gameStatus !== GameStatus.Ended) {
+      const startButton = getStartOrStopButton();
+      const setButton = getSetButton();
+      const addPlayers = getAddPlayers();
+      const deleteButton = getDeleteButton();
+
+      const items: MenuProps['items'] = [
+        { label: startButton, key: '1' },
+        { label: setButton, key: '2' },
+        { label: addPlayers, key: '3' },
+        { label: deleteButton, key: '4' } ];
+
       return <Dropdown menu={{ items }} trigger={[ 'click' ]}>
         <Button icon={<DownOutlined />} type="primary">
               Tegevused

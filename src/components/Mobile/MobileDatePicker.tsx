@@ -38,7 +38,7 @@ const MobileDatePicker = ({ value = {}, onChange, precision, format, showFuture 
         confirmText={'Ok'}
         cancelText={'Loobu'}
         precision={precision}
-        value={isDate(value) ? value : undefined}
+        value={isDate(value) ? new Date(value) : undefined}
         onConfirm={onChange}
         min={minDate}
         max={maxDate}

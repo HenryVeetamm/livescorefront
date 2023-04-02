@@ -16,7 +16,7 @@ export const playerApi = createApi({
   baseQuery: buildBaseQuery('player'),
   tagTypes: Object.values(tags),
   endpoints: (builder) => ({
-    getMyTeamPlayers: builder.query<PlayerDto[], void>({
+    getMyTeamPlayers: builder.query<PlayerDto[], any>({
       query: () => ({
         url: '/my-team',
         method: 'GET',

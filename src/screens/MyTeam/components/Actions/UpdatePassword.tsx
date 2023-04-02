@@ -48,12 +48,12 @@ const UpdatePassword = () => {
           form={form}
         >
           <Form.Item
-            label="Parool"
+            label="Uus parool"
 
             name="password"
             rules={[ { required: true, message: 'Palun sisesta e-mail' } ]}
           >
-            <Input.Password placeholder="Sisesta uus parool" />
+            <Input.Password />
           </Form.Item>
         </Form>
       </Modal>

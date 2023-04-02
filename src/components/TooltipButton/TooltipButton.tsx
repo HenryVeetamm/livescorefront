@@ -8,9 +8,9 @@ export type TooltipButtonProps = {
 }
 
 const TooltipButton = ({ title, buttonProps }: TooltipButtonProps) => {
-  const { isMedium } = useScreenBreakpoint();
+  const { isMobile } = useScreenBreakpoint();
 
-  return isMedium ?
+  return isMobile ?
     <Tooltip title={title} open={false} >
       <Button {...buttonProps}></Button>
     </Tooltip> :<Tooltip title={title} >

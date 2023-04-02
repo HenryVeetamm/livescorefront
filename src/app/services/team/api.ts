@@ -40,7 +40,7 @@ export const teamApi = createApi({
         return response;
       }
     }),
-    getMyTeam: builder.query<TeamDto, void>({
+    getMyTeam: builder.query<TeamDto, any>({
       query: () => ({
         url: 'my-team',
         method: 'GET'

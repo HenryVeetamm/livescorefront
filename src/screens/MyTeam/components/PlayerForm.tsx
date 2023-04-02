@@ -33,7 +33,6 @@ const PlayerForm = ({ button, initialValues } : PlayerFormProps) => {
 
   const onSubmit = () => {
     form.validateFields().then(async values => {
-      console.log(values);
       if (initialValues) {
         await editPlayer({ ...values, id: initialValues.id, teamId });
       }

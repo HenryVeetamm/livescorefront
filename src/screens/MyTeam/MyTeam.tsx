@@ -15,14 +15,13 @@ import { Paths } from 'constants/paths';
 import { useEffect } from 'react';
 
 const MyTeam = () => {
-  const { data, isFetching, isLoading } = useGetMyTeamQuery();
+  const { data, isFetching, isLoading } = useGetMyTeamQuery({}, { refetchOnMountOrArgChange: true });
   const isAdmin = useSelector(selectors.isUserAdmin);
   const navigate = useNavigate();
-  console.log(isAdmin);
 
   useEffect(() => {
     if (isAdmin) navigate(Paths.HOME);
-  }, []);
+  }, [ isAdmin ]);
 
 
   if (!isFetching && !data) return <TeamForm onClose={() => navigate(-1)} forceOpen/>;
@@ -53,7 +52,6 @@ const MyTeam = () => {
       </Descriptions>
     </Space>;
   };
-
 
   const renderExtra = () => {
     const items: MenuProps['items'] = [

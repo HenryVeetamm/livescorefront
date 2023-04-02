@@ -77,7 +77,7 @@ const TeamForm = ({ initialValues, onClose, forceOpen } : { initialValues?: any,
           name="homeStadium"
           rules={[ { required: true, message: 'Väli on kohustuslik' } ]}
         >
-          <Input placeholder="Sisesta võistkonna kodusaali asukoht või muu info"/>
+          <Input />
         </Form.Item>
       </Form>
     </Modal>
