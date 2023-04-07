@@ -11,7 +11,6 @@ import Efficency from 'components/Tags/EfficencyTag';
 
 const MobilePlayerInsert = ({ playerInGame, onClick, playerEfficency } : { playerInGame: PlayerInGameDto, onClick : any, playerEfficency : EfficiencyDto }) => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
-  console.log(playerEfficency);
 
   const getContent = () => {
     return (
