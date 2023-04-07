@@ -6,14 +6,17 @@ import ReceptionActions from '../Actions/Statistics/ReceptionActions';
 import ServeActions from '../Actions/Statistics/ServeActions';
 import '../../styles.less';
 import { useState } from 'react';
+import { EfficiencyDto } from 'utils/statistics';
+import Efficency from 'components/Tags/EfficencyTag';
 
-const MobilePlayerInsert = ({ playerInGame, onClick } : { playerInGame: PlayerInGameDto, onClick : any }) => {
+const MobilePlayerInsert = ({ playerInGame, onClick, playerEfficency } : { playerInGame: PlayerInGameDto, onClick : any, playerEfficency : EfficiencyDto }) => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
+  console.log(playerEfficency);
 
   const getContent = () => {
     return (
       <>
-        <Divider>#{playerInGame.player.shirtNumber} {playerInGame.player.firstName} {playerInGame.player.lastName}</Divider>
+        <Divider>#{playerInGame.player.shirtNumber} {playerInGame.player.lastName} <Efficency playerEfficency={playerEfficency}/></Divider>
         <Row justify={'center'}>
           <Col className={'text-center'}>
           Vastuvõtt {playerInGame.perfectReception}/{playerInGame.goodReception}/{playerInGame.receptionFault}
@@ -72,7 +75,7 @@ const MobilePlayerInsert = ({ playerInGame, onClick } : { playerInGame: PlayerIn
 
     <div onClick={(e) => onDivClick(e)}>
       <Divider >
-        #{playerInGame.player.shirtNumber} {playerInGame.player.firstName} {playerInGame.player.lastName}
+        #{playerInGame.player.shirtNumber} {playerInGame.player.lastName} <Efficency playerEfficency={playerEfficency}/>
       </Divider>
     </div>
 

@@ -33,7 +33,8 @@ const PlayerDetails = ({ player } : { player: PlayerDto }) => {
         <Image
           className="image-radius"
           src={player.profileAbsoulteUri}
-          preview={false}/>
+          preview={true}
+        />
       </div>;
     }
     return <Avatar icon={<UserOutlined/>} size="large" />;
