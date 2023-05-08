@@ -1,7 +1,7 @@
 import { Header } from 'antd/es/layout/layout';
 import Login from 'components/Login/Login';
 import './styles.less';
-import Menu from 'containers/Menu/Menu';
+import Menu from 'components/Menu/Menu';
 
 const LayoutHeader = () => {
 

@@ -1,7 +1,7 @@
 import { Paths } from 'constants/paths';
-import Authorize from 'containers/Authorized/Authorize';
-import AuthorizedStrict from 'containers/Authorized/AuthorizedStrict';
-import NotFound from 'containers/NotFound/NotFound';
+import Authorize from 'components/Authorized/Authorize';
+import AuthorizedStrict from 'components/Authorized/AuthorizedStrict';
+import NotFound from 'components/NotFound/NotFound';
 import { Route, Routes } from 'react-router-dom';
 import AdminView from 'screens/Admin/View';
 import Game from 'screens/Games/Game';

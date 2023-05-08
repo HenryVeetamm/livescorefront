@@ -16,7 +16,7 @@ const GameRow = ({ game }: { game: GameDto }) => {
 
   const getData = () => {
     if (isMobile) return getDateTime(game.scheduledTime);
-    return `${game.location} ,${getDateTime(game.scheduledTime)}`;
+    return `${game.location}, ${getDateTime(game.scheduledTime)}`;
   };
 
   const getAwayTeamName = () => {
@@ -69,11 +69,7 @@ const GameRow = ({ game }: { game: GameDto }) => {
             <div style={{ fontWeight:'bold' }}>{game.homeTeam.name} </div>
           </Row>
         </Col>
-        {/* <Col span={1} ><div className={'score-center'}>{game.homeTeamSetWins}</div></Col>
-        <Col span={2}>
-          <div className={'score-center'}>:</div>
-        </Col>
-        <Col span={1}><div className={'score-center'}>{game.awayTeamSetWins}</div></Col> */}
+
         {getGameInfo()}
 
         <Col span={10} >
@@ -93,6 +89,3 @@ const GameRow = ({ game }: { game: GameDto }) => {
 };
 
 export default GameRow;
-
-{/* <Col span={4} push={1}><div className='additional-info'>Tallinna Tehnika Gümnaasium. 28.04.1999</div></Col> */}
-

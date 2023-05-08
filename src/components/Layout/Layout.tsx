@@ -1,6 +1,6 @@
 import { Col, Row, Space } from 'antd';
 import Layout, { Content } from 'antd/es/layout/layout';
-import Header from 'containers/Header/Header';
+import Header from 'components/Header/Header';
 import useScreenBreakpoint from 'hooks/useScreenBreakpoint';
 import { Outlet } from 'react-router-dom';
 import './styles.less';

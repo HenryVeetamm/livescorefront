@@ -21,7 +21,6 @@ const Game = () => {
   useEffect(() => {
 
     if(params.id) getGame(params.id);
-    // if(game && game.gameStatus == GameStatus.Started) {
     dispatch(actions.setConnect({ gameId : params.id }));
 
     return () => {
